@@ -34,6 +34,10 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # Project Apps
     "store",
+    "basket",
+    "account",
+    "payment",
+    "orders",
     # Django Default Apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -58,7 +62,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -66,6 +70,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "store.context_processors.categories",
+                "basket.context_processors.basket",
             ],
         },
     },
@@ -132,3 +138,21 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Custom user model
+AUTH_USER_MODEL = 'account.UserBase'
+LOGIN_REDIRECT_URL = '/account/dashboard'
+LOGIN_URL = '/account/login/'
+
+
+# Email setting
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Basket session ID
+BASKET_SESSION_ID = 'basket'
+
+# Stripe Payment
+os.environ.setdefault('STRIPE_PUBLISHABLE_KEY', 'pk_test_51BbYtuJMWp5ChnxjeZRr4Dvtr8IzOSsfSewYg31o815lMGqbVfQTz59tUVWH7Ks4Ug1z7sXgaNb25JpLiOgaboPn000HKcJjUB')
+STRIPE_SECRET_KEY = 'sk_test_51BbYtuJMWp5ChnxjRM6t9vQvB4P2hMUqaXc3CORwOJ4EfVJ7QpZy61Rqe59WBOkiN0gJvfbckZsfV33T9TUnVqKt00An6UjSQW'
+# STRIPE_ENDPOINT_SECRET = ''
+# stripe listen --forward-to localhost:8000/payment/webhook/
